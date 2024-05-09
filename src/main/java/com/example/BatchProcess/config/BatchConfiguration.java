@@ -1,6 +1,6 @@
 package com.example.BatchProcess.config;
 
-import com.example.BatchProcess.entity.CustomerProfile;
+import com.example.BatchProcess.entity.Customer;
 import com.example.BatchProcess.entity.Product;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -32,11 +32,11 @@ public class BatchConfiguration {
     }
     // First Job
     @Bean
-    public Job firstJobBean(JobRepository jobRepository,
+    public Job productJob(JobRepository jobRepository,
                             JobCompletionNotificationImpl listener,
                             Step firstStep
     ) {
-        return new JobBuilder("firstJob", jobRepository)
+        return new JobBuilder("productJob", jobRepository)
                 .listener(listener)
                 .start(firstStep)
                 .build();
@@ -60,11 +60,11 @@ public class BatchConfiguration {
 
     // Second Job
     @Bean
-    public Job secondJobBean(JobRepository jobRepository,
+    public Job customerJob(JobRepository jobRepository,
                              JobCompletionNotificationImpl listener,
                              Step secondStep
     ) {
-        return new JobBuilder("secondJob", jobRepository)
+        return new JobBuilder("customerJob", jobRepository)
                 .listener(listener)
                 .start(secondStep)
                 .build();
@@ -74,12 +74,12 @@ public class BatchConfiguration {
     public Step secondStep(
             JobRepository jobRepository,
             DataSourceTransactionManager transactionManager,
-            ItemReader<CustomerProfile> reader,
-            ItemProcessor<CustomerProfile, CustomerProfile> processor,
-            ItemWriter<CustomerProfile> writer
+            ItemReader<Customer> reader,
+            ItemProcessor<Customer, Customer> processor,
+            ItemWriter<Customer> writer
     ) {
         return new StepBuilder("secondJobStep", jobRepository)
-                .<CustomerProfile, CustomerProfile>chunk(5, transactionManager)
+                .<Customer, Customer>chunk(5, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
@@ -100,13 +100,13 @@ public class BatchConfiguration {
 
     // Reader for the second job
     @Bean
-    public FlatFileItemReader<CustomerProfile> customerProfileReader() {
-        return new FlatFileItemReaderBuilder<CustomerProfile>()
+    public FlatFileItemReader<Customer> customerProfileReader() {
+        return new FlatFileItemReaderBuilder<Customer>()
                 .name("customerProfileReader")
                 .resource(new ClassPathResource("customer.csv"))
                 .delimited()
-                .names("userID", "title", "professional", "age")
-                .targetType(CustomerProfile.class)
+                .names("customerId", "name", "email", "address")
+                .targetType(Customer.class)
                 .build();
     }
 
@@ -117,7 +117,7 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public ItemProcessor<CustomerProfile, CustomerProfile> customerProfileProcessor() {
+    public ItemProcessor<Customer, Customer> customerProfileProcessor() {
         return new CustomCustomerProfessor();
     }
 
@@ -125,16 +125,16 @@ public class BatchConfiguration {
     @Bean
     public ItemWriter<Product> productWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Product>()
-                .sql("insert into mg_products(product_id, title, description, price, discount) values (:productId, :title, :description, :price, :discount)")
+                .sql("insert into products(product_id, title, description, price, discount, discounted_price) values (:productId, :title, :description, :price, :discount, :discountedPrice)")
                 .dataSource(dataSource)
                 .beanMapped()
                 .build();
     }
 
     @Bean
-    public ItemWriter<CustomerProfile> customerProfileWriter(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder<CustomerProfile>()
-                .sql("insert into mg_customers(user_id, title, professional, age) values (:userId, :title, :professional, :age)")
+    public ItemWriter<Customer> customerProfileWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Customer>()
+                .sql("insert into customers(customer_id, name, email, address) values (:customerId, :name, :email, :address)")
                 .dataSource(dataSource)
                 .beanMapped()
                 .build();

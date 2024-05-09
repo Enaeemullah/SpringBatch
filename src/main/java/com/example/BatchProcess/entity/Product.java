@@ -1,32 +1,23 @@
 package com.example.BatchProcess.entity;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-@Entity(name = "MG_PRODUCTS")
-@Table(name = "MG_PRODUCTS", schema = "batchdb")
 public class Product  {
     @Id
     private String productId;
     private String title;
     private String description;
-
     private String price;
-
     private String discount;
+    private String discountedPrice;
 
-    private  String discountedPrice;
-
-    public Product(String productId, String title, String description, String price, String discount) {
+    public Product(String productId, String title, String description, String price, String discount, String discountedPrice) {
         this.productId = productId;
         this.title = title;
         this.description = description;
         this.price = price;
         this.discount = discount;
-    }
-
-    public Product() {
+        this.discountedPrice = discountedPrice;
     }
 
     public String getProductId() {

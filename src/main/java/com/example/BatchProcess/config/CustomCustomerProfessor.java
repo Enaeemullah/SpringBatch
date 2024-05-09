@@ -1,11 +1,16 @@
 package com.example.BatchProcess.config;
 
-import com.example.BatchProcess.entity.CustomerProfile;
+import com.example.BatchProcess.entity.Customer;
 import org.springframework.batch.item.ItemProcessor;
 
-public class CustomCustomerProfessor implements ItemProcessor<CustomerProfile, CustomerProfile> {
+public class CustomCustomerProfessor implements ItemProcessor<Customer, Customer> {
     @Override
-    public CustomerProfile process(CustomerProfile item) throws Exception {
+    public Customer process(Customer item) throws Exception {
+        // Capitalize the title
+        String capitalizedTitle = item.getName().toUpperCase();
+        item.setName(capitalizedTitle);
+
+        // Return the modified CustomerProfile
         return item;
     }
 }

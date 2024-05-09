@@ -6,13 +6,8 @@ import org.springframework.batch.item.ItemProcessor;
 public class CustomProductItemProcessor implements ItemProcessor<Product, Product> {
     @Override
     public Product process(Product item) throws Exception {
-//        transform ka logic yaha likha jayega
-//        calulate karenge discounted price ko
-//        original  price
-//        discount
 
         try {
-//            put the percentage logic
             System.out.println(item.getDescription());
             int discountPer = Integer.parseInt(item.getDiscount().trim());
             double originalPrice = Double.parseDouble(item.getPrice().trim());

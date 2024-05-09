@@ -1,10 +1,10 @@
-userID,title,professional,age
-1,Product 1, TEACHER, 30
-2,Product 2,TEACHER, 39
-3,Product 3,TEACHER, 25
-4,Product 4,TEACHER, 22
-5,Product 5,TEACHER, 34
-6,Product 6,TEACHER, 24
-7,Product 7,TEACHER, 26
-8,Product 8,TEACHER, 27
-9,Product 9,TEACHER, 28
+customerId, name, email, address
+1, Alanna Cuevas, TEACHER, 30
+2, Laylah Swanson,ENGINEER, 39
+3, Kye Gutierrez, DOCTOR, 25
+4, Julius Ford, PILOT, 22
+5, Sincere McDonald,NURSE, 34
+6, Blaine Cortes,BAKER, 24
+7, Wesley Valencia,DRIVER, 26
+8, Dawson Pace,TEACHER, 27
+9, Cason Lamb,TEACHER, 28
